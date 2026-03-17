@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Support — Recall Flow</title>
+    <meta name="description"
+        content="Get help with Recall Flow. Submit a question or browse frequently asked questions." />
+
+    <!-- Favicon (gradient square) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop stop-color='%235E5CE6'/><stop offset='1' stop-color='%23BF5AF2'/></linearGradient></defs><rect rx='20' width='100' height='100' fill='url(%23g)'/><text x='50' y='68' text-anchor='middle' fill='white' font-size='50' font-family='system-ui' font-weight='bold'>R</text></svg>" />
+
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        /* ---- Support Page Layout ---- */
+        .support-page {
+            padding-top: 140px;
+            padding-bottom: var(--space-5xl);
+            min-height: 100vh;
+        }
+
+        .support-content {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .support-content h1 {
+            font-size: var(--font-size-4xl);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: var(--space-sm);
+        }
+
+        .support-intro {
+            font-size: var(--font-size-lg);
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .support-back {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: var(--color-text-tertiary);
+            transition: color var(--transition-fast);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .support-back:hover {
+            color: var(--color-accent-hover);
+        }
+
+        .support-back svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ---- Contact Form ---- */
+        .contact-section {
+            margin-bottom: var(--space-4xl);
+        }
+
+        .contact-section h2 {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+
+        .form-group label {
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            letter-spacing: 0.02em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--color-border);
+            background: var(--color-bg-card);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            color: var(--color-text-primary);
+            font-family: var(--font-family);
+            font-size: var(--font-size-base);
+            line-height: 1.6;
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+            outline: none;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--color-text-tertiary);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(94, 92, 230, 0.15);
+        }
+
+        .form-group textarea {
+            min-height: 160px;
+            resize: vertical;
+        }
+
+        .form-submit {
+            align-self: flex-start;
+        }
+
+        .form-submit .btn-primary {
+            padding: 14px 36px;
+            font-size: var(--font-size-base);
+        }
+
+        .form-success {
+            display: none;
+            padding: var(--space-xl);
+            border-radius: var(--border-radius-md);
+            background: rgba(48, 209, 88, 0.08);
+            border: 1px solid rgba(48, 209, 88, 0.25);
+            color: #30D158;
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .form-success.visible {
+            display: flex;
+        }
+
+        /* ---- FAQ Section ---- */
+        .faq-section h2 {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .faq-item {
+            border-radius: var(--border-radius-lg);
+            background: var(--color-bg-card);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--color-border);
+            overflow: hidden;
+            transition: border-color var(--transition-base);
+        }
+
+        .faq-item:hover {
+            border-color: rgba(94, 92, 230, 0.2);
+        }
+
+        .faq-item.open {
+            border-color: rgba(94, 92, 230, 0.3);
+        }
+
+        .faq-question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-xl) var(--space-xl);
+            cursor: pointer;
+            user-select: none;
+            gap: var(--space-md);
+        }
+
+        .faq-question h3 {
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            line-height: 1.5;
+            margin: 0;
+            flex: 1;
+        }
+
+        .faq-icon {
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            border-radius: 50%;
+            background: rgba(94, 92, 230, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform var(--transition-base), background var(--transition-base);
+        }
+
+        .faq-icon svg {
+            width: 14px;
+            height: 14px;
+            color: var(--color-accent-hover);
+            transition: transform var(--transition-base);
+        }
+
+        .faq-item.open .faq-icon {
+            background: var(--gradient-accent);
+        }
+
+        .faq-item.open .faq-icon svg {
+            transform: rotate(180deg);
+            color: white;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s var(--ease-out-expo);
+        }
+
+        .faq-answer-inner {
+            padding: 0 var(--space-xl) var(--space-xl);
+        }
+
+        .faq-answer-inner p {
+            font-size: var(--font-size-base);
+            color: var(--color-text-secondary);
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        .faq-answer-inner a {
+            color: var(--color-accent-hover);
+            transition: color var(--transition-fast);
+        }
+
+        .faq-answer-inner a:hover {
+            color: var(--color-text-primary);
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 768px) {
+            .support-content h1 {
+                font-size: var(--font-size-2xl);
+            }
+
+            .faq-question {
+                padding: var(--space-lg);
+            }
+
+            .faq-answer-inner {
+                padding: 0 var(--space-lg) var(--space-lg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav scrolled" id="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <div class="nav-logo-icon">R</div>
+                Recall Flow
+            </a>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html#features">Features</a>
+                <a href="index.html#how-it-works">How It Works</a>
+                <a href="index.html#ai">AI Engine</a>
+                <a href="index.html#testimonials">Reviews</a>
+                <a href="index.html#download" class="nav-cta">Download</a>
+            </div>
+            <div class="nav-mobile-toggle" id="nav-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <section class="support-page">
+        <div class="container">
+            <div class="support-content">
+
+                <a href="index.html" class="support-back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    Back to Home
+                </a>
+
+                <h1>Get <span class="gradient-text">Help</span></h1>
+                <p class="support-intro">
+                    Have a question, found a bug, or need help getting started? Send us a message and we'll get back to
+                    you as soon as possible.
+                </p>
+
+                <!-- Contact Form -->
+                <div class="contact-section">
+                    <h2>Send Us a Message</h2>
+
+                    <div class="form-success" id="form-success">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                        Thanks for reaching out! We'll get back to you shortly.
+                    </div>
+
+                    <form class="contact-form" id="contact-form">
+                        <div class="form-group">
+                            <label for="support-name">Name</label>
+                            <input type="text" id="support-name" name="name" placeholder="Your name" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="support-email">Email</label>
+                            <input type="email" id="support-email" name="email" placeholder="your@email.com" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="support-message">Your Question</label>
+                            <textarea id="support-message" name="message" placeholder="Describe your question or issue…"
+                                required></textarea>
+                        </div>
+                        <div class="form-submit">
+                            <button type="submit" class="btn-primary">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="22" y1="2" x2="11" y2="13" />
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                                </svg>
+                                Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- FAQ Accordion -->
+                <div class="faq-section">
+                    <h2>Frequently Asked <span class="gradient-text">Questions</span></h2>
+
+                    <div class="faq-list" id="faq-list">
+
+                        <div class="faq-item">
+                            <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+                                <h3>What is Recall Flow?</h3>
+                                <div class="faq-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-answer-inner">
+                                    <p>Recall Flow is an AI-powered flashcard app for iOS that uses smart spaced
+                                        repetition to help you learn faster and remember longer. You can create your own
+                                        cards, import Anki decks, or let AI generate flashcards from your notes and
+                                        study materials.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+                                <h3>How does the spaced repetition algorithm work?</h3>
+                                <div class="faq-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-answer-inner">
+                                    <p>Our algorithm is based on the proven Anki system. It tracks how well you know
+                                        each card and schedules reviews at the optimal moment — right before you're
+                                        about to forget. The AI also builds a personal memory model for each card,
+                                        continuously adapting to your unique learning patterns.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+                                <h3>Can I import my existing Anki decks?</h3>
+                                <div class="faq-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-answer-inner">
+                                    <p>Yes! Recall Flow supports importing Anki decks in one tap. Once imported, your
+                                        cards are automatically enhanced with AI-powered scheduling and hints to
+                                        supercharge your study sessions.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+                                <h3>How does AI card generation work?</h3>
+                                <div class="faq-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-answer-inner">
+                                    <p>Simply paste your notes, a PDF, or a URL into Recall Flow. Our AI analyses the
+                                        content, identifies key concepts, and instantly creates perfectly structured
+                                        flashcards ready for review. You can always edit or customize the generated
+                                        cards afterwards.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+                                <h3>Is Recall Flow free to use?</h3>
+                                <div class="faq-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-answer-inner">
+                                    <p>Recall Flow is free to download with core features available at no cost. Some
+                                        advanced features like unlimited AI card generation and premium analytics may
+                                        require a subscription. No credit card is needed to get started.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+                                <h3>Is my data private and secure?</h3>
+                                <div class="faq-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-answer-inner">
+                                    <p>Absolutely. Your flashcard data is stored locally on your device by default. If
+                                        you enable cloud sync, all data is encrypted in transit and at rest. We never
+                                        sell your personal information. Read our full <a href="privacy.html">Privacy
+                                            Policy</a> for more details.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+                                <h3>How do I cancel my subscription?</h3>
+                                <div class="faq-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-answer-inner">
+                                    <p>You can manage or cancel your subscription anytime through your iPhone's Settings
+                                        → Apple ID → Subscriptions. Cancellations take effect at the end of your current
+                                        billing period, and you'll continue to have access until then.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+                                <h3>Which platforms does Recall Flow support?</h3>
+                                <div class="faq-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-answer-inner">
+                                    <p>Recall Flow is currently available for iOS (iPhone and iPad). We're focused on
+                                        delivering the best possible experience on Apple devices. Stay tuned for updates
+                                        on future platform support.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-logo">
+                    <div class="footer-logo-icon">R</div>
+                    Recall Flow
+                </div>
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Use</a>
+                    <a href="support.html">Support</a>
+                </div>
+                <p class="footer-copy">&copy; 2025 Recall Flow. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const item = this.closest('.faq-item');
+                const answer = item.querySelector('.faq-answer');
+                const isOpen = item.classList.contains('open');
+
+                // close all
+                document.querySelectorAll('.faq-item.open').forEach(function (openItem) {
+                    openItem.classList.remove('open');
+                    openItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+                    openItem.querySelector('.faq-answer').style.maxHeight = null;
+                });
+
+                // toggle clicked
+                if (!isOpen) {
+                    item.classList.add('open');
+                    this.setAttribute('aria-expanded', 'true');
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                }
+            });
+
+            // keyboard accessibility
+            btn.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        });
+
+        // Contact Form
+        document.getElementById('contact-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            this.style.display = 'none';
+            document.getElementById('form-success').classList.add('visible');
+        });
+    </script>
+</body>
+
+</html>
